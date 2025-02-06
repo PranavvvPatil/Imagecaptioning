@@ -8,6 +8,7 @@ export default {
         down: "0px 1.349px 1.349px 0px rgba(0, 0, 0, 0.25)",
       },
       fontFamily: {
+        spaceGrotesk: ['"Space Grotesk"', 'sans-serif'],
         Inter: ["Inter", "sans-serif"],
         Philosopher: ["Philosopher", "sans-serif"],
         Poppins: ["Poppins", "sans-serif"],
