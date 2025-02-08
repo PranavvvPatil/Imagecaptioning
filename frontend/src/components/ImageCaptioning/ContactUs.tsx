@@ -89,7 +89,7 @@ const ReachOut = () => {
   };
 
   return (
-    <div className="w-full h-auto bg-[#18212C] flex items-center justify-center p-4">
+    <div className="w-full h-lvh bg-[#18212C] flex items-center justify-center p-4">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Reach Out to Us</h1>
         {status && <p className={`text-center ${status.includes("successfully") ? "text-green-500" : "text-red-500"}`}>{status}</p>}
