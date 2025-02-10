@@ -1,6 +1,9 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCube } from "swiper/modules";
+import { doSignOut } from "../../firebase/auth.tsx";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/authContext.tsx";
 import { motion } from "framer-motion";
 import { FC } from "react";
 import {
@@ -79,6 +82,8 @@ const FloatingParticles = ({ color = "blue" }) => (
 
 
 
+
+
 interface FeatureCardProps {
   icon: React.ElementType;
   title: string;
@@ -112,20 +117,8 @@ const FeatureCard: FC<FeatureCardProps> = ({
         className="mb-6 p-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full
           ring-2 ring-white/[0.08] hover:ring-blue-500/30 transition-all duration-300
           relative overflow-hidden shadow-lg"
-        whileHover={{
-          rotate: 360,
-          transition: { duration: 1, ease: "easeInOut" },
-        }}
-        animate={{
-          rotate: 360,
-        }}
-        transition={{
-          rotate: {
-            duration: 8,
-            ease: "linear",
-            repeat: Infinity,
-          },
-        }}
+        
+        
       >
         {/* Inner glow for icon */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-sm" />
@@ -278,6 +271,17 @@ const TeamMember: FC<TeamMemberProps> = ({
 );
 
 const App = () => {
+
+    const navigate = useNavigate();
+    const { userLoggedIn } = useAuth();
+
+    const handleAuthAction = async () => {
+      if (userLoggedIn) {
+        await doSignOut();
+      }
+      navigate("/login");
+    };
+  
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 overflow-hidden">
       <AnimatedBackground />
@@ -301,6 +305,7 @@ const App = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleAuthAction}
             className="px-10 py-5 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xl font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all"
           >
             Get Started
@@ -490,7 +495,7 @@ const App = () => {
               role="Backend Engineer"
               image="/images/renuka.jpg"
               linkedin="https://www.linkedin.com/in/renuka-jadhav-26a515291/"
-              github="https://github.com/renukajadhav"
+              github="https://github.com/renukaj29"
               floatDelay={0}
             />
             <TeamMember
