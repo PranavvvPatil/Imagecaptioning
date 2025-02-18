@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,  useLocation, useNavigate } from 'react-router-dom';
 import { Mail, Phone, MapPin, Github, Linkedin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -31,6 +31,35 @@ const ShiningStars = () => (
 );
 
 const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavigation = (item: string) => {
+    switch (item) {
+      case 'About':
+        // Navigate to home
+        navigate('/');
+        break;
+      case 'Features':
+      case 'Team':
+        if (location.pathname === '/') {
+          // If on home page, scroll to section
+          const element = document.getElementById(item.toLowerCase());
+          element?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          // If not on home page, navigate to home and then scroll
+          navigate('/', { state: { scrollTo: item.toLowerCase() } });
+        }
+        break;
+      case 'Contact':
+        // Navigate to contact page
+        navigate('/reach-out');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="relative w-full bg-gradient-to-br from-gray-900 via-[#1a0b2e] to-[#0f0728] overflow-hidden">
       <ShiningStars />
@@ -78,26 +107,7 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          {/* Quick Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <h3 className="text-xl font-semibold bg-gradient-to-r from-amber-200 to-yellow-200 bg-clip-text text-transparent mb-6">
-              Quick Links
-            </h3>
-            <ul className="space-y-4">
-              {['About', 'Features', 'Team', 'Contact'].map((item) => (
-                <motion.li key={item} whileHover={{ x: 5 }}>
-                  <Link to={`/${item.toLowerCase()}`} className="text-purple-200/80 hover:text-yellow-200 transition-colors">
-                    {item}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-          </motion.div>
-
+         
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}

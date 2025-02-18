@@ -1,4 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import React, { Suspense } from "react";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Signup";
@@ -12,8 +18,12 @@ import ProtectedComponent from "./components/ProtectedComponent";
 
 // Lazy load components
 const HomePage = React.lazy(() => import("./pages/Home/HomePage"));
-const PrivacyPolicy = React.lazy(() => import("./components/ImageCaptioning/PrivacyPolicy"));
-const ReachOut = React.lazy(() => import("./components/ImageCaptioning/ContactUs"));
+const PrivacyPolicy = React.lazy(
+  () => import("./components/ImageCaptioning/PrivacyPolicy")
+);
+const ReachOut = React.lazy(
+  () => import("./components/ImageCaptioning/ContactUs")
+);
 
 // Redirect users if they are already logged in
 function PublicRoute({ children }: { children: React.ReactNode }) {
@@ -24,13 +34,13 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 // Footer wrapper component to handle conditional rendering
 function FooterWrapper() {
   const location = useLocation();
-  const authPaths = ['/login', '/register'];
-  
+  const authPaths = ["/login", "/register"];
+
   // Don't render footer on auth pages
   if (authPaths.includes(location.pathname)) {
     return null;
   }
-  
+
   return <Footer />;
 }
 
@@ -43,51 +53,73 @@ function App() {
           <div className="flex-grow">
             <Routes>
               {/* Show Home Only If User Is Not Logged In */}
-              <Route path="/" element={
-                <PublicRoute>
-                  <Home />
-                </PublicRoute>
-              } />
+              <Route
+                path="/"
+                element={
+                  <PublicRoute>
+                    <Home />
+                  </PublicRoute>
+                }
+              />
 
               {/* Redirect Logged-In Users Away From Login/Register */}
-              <Route path="/login" element={
-                <PublicRoute>
-                  <Login />
-                </PublicRoute>
-              } />
-              <Route path="/register" element={
-                <PublicRoute>
-                  <Register />
-                </PublicRoute>
-              } />
+              <Route
+                path="/login"
+                element={
+                  <PublicRoute>
+                    <Login />
+                  </PublicRoute>
+                }
+              />
+              
+              <Route
+                path="/register"
+                element={
+                  <PublicRoute>
+                    <Register />
+                  </PublicRoute>
+                }
+              />
 
               {/* Protected Page - Requires Login */}
-              <Route path="/protected" element={
-                <ProtectedRoute>
-                  <Suspense fallback={<Loading />}>
-                    <ProtectedComponent />
-                  </Suspense>
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/protected"
+                element={
+                  <ProtectedRoute>
+                    <Suspense fallback={<Loading />}>
+                      <ProtectedComponent />
+                    </Suspense>
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Always Visible Pages */}
-              <Route path="/privacy-policy" element={
-                <Suspense fallback={<Loading />}>
-                  <PrivacyPolicy />
-                </Suspense>
-              } />
-              <Route path="/reach-out" element={
-                <Suspense fallback={<Loading />}>
-                  <ReachOut />
-                </Suspense>
-              } />
+              <Route
+                path="/privacy-policy"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <PrivacyPolicy />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/reach-out"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <ReachOut />
+                  </Suspense>
+                }
+              />
 
               {/* Lazy Loaded Home Page (if needed separately) */}
-              <Route path="/home" element={
-                <Suspense fallback={<Loading />}>
-                  <HomePage />
-                </Suspense>
-              } />
+              <Route
+                path="/home"
+                element={
+                  <Suspense fallback={<Loading />}>
+                    <HomePage />
+                  </Suspense>
+                }
+              />
             </Routes>
           </div>
           <FooterWrapper />

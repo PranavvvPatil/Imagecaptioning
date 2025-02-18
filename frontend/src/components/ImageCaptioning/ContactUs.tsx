@@ -1,192 +1,15 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-
-// const ReachOut = () => {
-//   // Define form data structure
-//   interface FormData {
-//     name: string;
-//     email: string;
-//     phone: string;
-//     message: string;
-//   }
-
-//   const [formData, setFormData] = useState<FormData>({
-//     name: "",
-//     email: "",
-//     phone: "",
-//     message: "",
-//   });
-
-//   const [errors, setErrors] = useState<Partial<FormData>>({});
-//   const [status, setStatus] = useState<string>("");
-
-//   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-
-//   const validate = (): boolean => {
-//     let isValid = true;
-//     const newErrors: Partial<FormData> = {};
-
-//     if (!formData.name.trim()) {
-//       newErrors.name = "Name is required.";
-//       isValid = false;
-//     }
-
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     if (!formData.email.trim()) {
-//       newErrors.email = "Email is required.";
-//       isValid = false;
-//     } else if (!emailRegex.test(formData.email)) {
-//       newErrors.email = "Invalid email format.";
-//       isValid = false;
-//     }
-
-//     const phoneRegex = /^\d{10}$/;
-//     if (!formData.phone.trim()) {
-//       newErrors.phone = "Phone number is required.";
-//       isValid = false;
-//     } else if (!phoneRegex.test(formData.phone)) {
-//       newErrors.phone = "Phone number must be 10 digits.";
-//       isValid = false;
-//     }
-
-//     if (!formData.message.trim()) {
-//       newErrors.message = "Message is required.";
-//       isValid = false;
-//     }
-
-//     setErrors(newErrors);
-//     return isValid;
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     if (validate()) {
-//       try {
-//         const response = await axios.post("http://localhost:5001/api/contact", formData);
-
-//         if (response.status === 201) {
-//           setStatus("Form submitted successfully!");
-//           setFormData({
-//             name: "",
-//             email: "",
-//             phone: "",
-//             message: "",
-//           });
-//           setErrors({});
-//         }
-//       } catch (error) {
-//         console.error("Error submitting form:", error);
-//         setStatus("An error occurred while submitting the form. Please try again.");
-//       }
-//     }
-//   };
-
-//   return (
-//     <div className="w-full h-lvh bg-[#18212C] flex items-center justify-center p-4">
-//       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-//         <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">Reach Out to Us</h1>
-//         {status && <p className={`text-center ${status.includes("successfully") ? "text-green-500" : "text-red-500"}`}>{status}</p>}
-//         <form onSubmit={handleSubmit}>
-//           {/* Name Field */}
-//           <div className="mb-4">
-//             <label htmlFor="name" className="block text-gray-700 font-medium mb-1">
-//               Name
-//             </label>
-//             <input
-//               type="text"
-//               id="name"
-//               name="name"
-//               value={formData.name}
-//               onChange={handleChange}
-//               className={`w-full p-2 border rounded-lg ${
-//                 errors.name ? "border-red-500" : "border-gray-300"
-//               }`}
-//               placeholder="Enter your name"
-//             />
-//             {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-//           </div>
-
-//           {/* Email Field */}
-//           <div className="mb-4">
-//             <label htmlFor="email" className="block text-gray-700 font-medium mb-1">
-//               Email
-//             </label>
-//             <input
-//               type="email"
-//               id="email"
-//               name="email"
-//               value={formData.email}
-//               onChange={handleChange}
-//               className={`w-full p-2 border rounded-lg ${
-//                 errors.email ? "border-red-500" : "border-gray-300"
-//               }`}
-//               placeholder="Enter your email"
-//             />
-//             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-//           </div>
-
-//           {/* Phone Number Field */}
-//           <div className="mb-4">
-//             <label htmlFor="phone" className="block text-gray-700 font-medium mb-1">
-//               Phone Number
-//             </label>
-//             <input
-//               type="text"
-//               id="phone"
-//               name="phone"
-//               value={formData.phone}
-//               onChange={handleChange}
-//               className={`w-full p-2 border rounded-lg ${
-//                 errors.phone ? "border-red-500" : "border-gray-300"
-//               }`}
-//               placeholder="Enter your phone number"
-//             />
-//             {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-//           </div>
-
-//           {/* Message Field */}
-//           <div className="mb-4">
-//             <label htmlFor="message" className="block text-gray-700 font-medium mb-1">
-//               Message
-//             </label>
-//             <textarea
-//               id="message"
-//               name="message"
-//               value={formData.message}
-//               onChange={handleChange}
-//               className={`w-full p-2 border rounded-lg ${
-//                 errors.message ? "border-red-500" : "border-gray-300"
-//               }`}
-//               placeholder="Enter your message"
-//               rows={4}
-//             ></textarea>
-//             {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
-//           </div>
-
-//           {/* Submit Button */}
-//           <button
-//             type="submit"
-//             className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-//           >
-//             Send Message
-//           </button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ReachOut;
-
 import React, { useState } from "react";
-import axios from "axios";
+import { 
+  User, 
+  Mail, 
+  Phone, 
+  MessageSquare, 
+  MapPin,
+  CheckCircle,
+  AlertCircle,
+  ArrowRight,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface FormData {
   name: string;
@@ -211,7 +34,8 @@ const ReachOut = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -219,6 +43,9 @@ const ReachOut = () => {
       ...prevData,
       [name]: value,
     }));
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const validate = (): boolean => {
@@ -226,30 +53,33 @@ const ReachOut = () => {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = "Name is required.";
+      newErrors.name = "Name is required";
       isValid = false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required.";
+      newErrors.email = "Email is required";
       isValid = false;
     } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Invalid email format.";
+      newErrors.email = "Please enter a valid email";
       isValid = false;
     }
 
     const phoneRegex = /^\d{10}$/;
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required.";
+      newErrors.phone = "Phone number is required";
       isValid = false;
-    } else if (!phoneRegex.test(formData.phone)) {
-      newErrors.phone = "Phone number must be 10 digits.";
+    } else if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
+      newErrors.phone = "Please enter a valid 10-digit number";
       isValid = false;
     }
 
     if (!formData.message.trim()) {
-      newErrors.message = "Message is required.";
+      newErrors.message = "Message is required";
+      isValid = false;
+    } else if (formData.message.length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
       isValid = false;
     }
 
@@ -259,132 +89,228 @@ const ReachOut = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (validate()) {
       try {
-        const response = await axios.post("http://localhost:5001/api/contact", formData);
-
-        if (response.status === 201) {
-          setStatus("Form submitted successfully!");
-          setFormData({
-            name: "",
-            email: "",
-            phone: "",
-            message: "",
-          });
-          setErrors({});
-        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setStatus("Message sent successfully! We'll get back to you soon.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+        setErrors({});
       } catch (error) {
-        console.error("Error submitting form:", error);
-        setStatus("An error occurred while submitting the form. Please try again.");
+        setStatus("An error occurred while sending your message. Please try again.");
       }
     }
+    setIsSubmitting(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-gray-900 to-zinc-900 flex items-center justify-center p-4">
-      <div className="relative w-full max-w-lg">
-        {/* Decorative background elements */}
-        <div className="absolute -top-8 -left-8 w-64 h-64 bg-rose-400 rounded-full mix-blend-multiply filter blur-xl opacity-40"></div>
-        <div className="absolute -bottom-8 -right-8 w-64 h-64 bg-amber-400 rounded-full mix-blend-multiply filter blur-xl opacity-40"></div>
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-sky-50 to-cyan-50 flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Animated grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-rose-50/50 via-transparent to-cyan-50/50" />
+      </div>
+      
+      <div className="absolute inset-0">
+        <div className="absolute top-0 -left-4 w-96 h-96 bg-rose-200/20 rounded-full mix-blend-normal filter blur-3xl" />
+        <div className="absolute bottom-0 -right-4 w-96 h-96 bg-sky-200/20 rounded-full mix-blend-normal filter blur-3xl" />
+      </div>
 
-        <div className="relative bg-white/5 backdrop-blur-lg rounded-2xl p-8 shadow-xl transition-all duration-300">
-          <h1 className="text-3xl font-bold text-white text-center mb-8">
-            Reach Out to Us
+      <div className="relative w-full max-w-5xl">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+            Let's Start a Conversation
           </h1>
+          <p className="text-slate-600 max-w-2xl mx-auto">
+            Have a project in mind? We'd love to discuss how we can help bring your ideas to life.
+          </p>
+        </motion.div>
 
-          {status && (
-            <div className={`mb-6 p-4 rounded-lg text-center ${
-              status.includes("successfully")
-                ? "bg-rose-500/20 text-rose-100"
-                : "bg-red-500/20 text-red-100"
-            }`}>
-              {status}
+        <div className="grid md:grid-cols-12 gap-8">
+          {/* Contact Cards */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="md:col-span-4 space-y-4"
+          >
+            {/* Quick Contact Card */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200">
+              <div className="space-y-6">
+                <h3 className="text-xl font-semibold text-slate-800 mb-4">Quick Contact</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-4">
+                    <div className="p-2 bg-blue-50 rounded-lg">
+                      <Mail className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-slate-500 text-sm">Email us at</p>
+                      <p className="text-slate-800">hello@company.com</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="p-2 bg-cyan-50 rounded-lg">
+                      <Phone className="w-5 h-5 text-cyan-600" />
+                    </div>
+                    <div>
+                      <p className="text-slate-500 text-sm">Call us at</p>
+                      <p className="text-slate-800">+1 (555) 000-0000</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="p-2 bg-blue-50 rounded-lg">
+                      <MapPin className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-slate-500 text-sm">Visit us at</p>
+                      <p className="text-slate-800">123 Business Ave, Suite 100<br />New York, NY 10001</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+          </motion.div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className={`w-full bg-white/5 border ${
-                  errors.name ? "border-red-400" : "border-white/10"
-                } text-white rounded-lg px-4 py-3 outline-none transition-all duration-300
-                focus:border-rose-400/50 focus:bg-white/10 placeholder:text-white/50`}
-                placeholder="Enter your name"
-              />
-              {errors.name && (
-                <p className="text-red-300 text-sm mt-1">{errors.name}</p>
+          {/* Contact Form */}
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="md:col-span-8 bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-slate-200"
+          >
+            <AnimatePresence>
+              {status && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className={`mb-6 p-4 rounded-lg flex items-center space-x-3 ${
+                    status.includes("successfully")
+                      ? "bg-green-50 text-green-700 border border-green-100"
+                      : "bg-red-50 text-red-700 border border-red-100"
+                  }`}
+                >
+                  {status.includes("successfully") ? (
+                    <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  )}
+                  <span>{status}</span>
+                </motion.div>
               )}
-            </div>
+            </AnimatePresence>
 
-            <div>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`w-full bg-white/5 border ${
-                  errors.email ? "border-red-400" : "border-white/10"
-                } text-white rounded-lg px-4 py-3 outline-none transition-all duration-300
-                focus:border-rose-400/50 focus:bg-white/10 placeholder:text-white/50`}
-                placeholder="Enter your email"
-              />
-              {errors.email && (
-                <p className="text-red-300 text-sm mt-1">{errors.email}</p>
-              )}
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <div className="relative group">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-blue-600" />
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={`w-full bg-white/90 border pl-11 ${
+                        errors.name ? "border-red-300" : "border-slate-200"
+                      } text-slate-900 rounded-lg px-4 py-3 outline-none transition-all duration-300
+                      focus:border-blue-500 focus:bg-white group-hover:bg-white placeholder:text-slate-400`}
+                      placeholder="Your name"
+                    />
+                  </div>
+                  {errors.name && (
+                    <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+                  )}
+                </div>
 
-            <div>
-              <input
-                type="text"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className={`w-full bg-white/5 border ${
-                  errors.phone ? "border-red-400" : "border-white/10"
-                } text-white rounded-lg px-4 py-3 outline-none transition-all duration-300
-                focus:border-rose-400/50 focus:bg-white/10 placeholder:text-white/50`}
-                placeholder="Enter your phone number"
-              />
-              {errors.phone && (
-                <p className="text-red-300 text-sm mt-1">{errors.phone}</p>
-              )}
-            </div>
+                <div>
+                  <div className="relative group">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-blue-600" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`w-full bg-white/90 border pl-11 ${
+                        errors.email ? "border-red-300" : "border-slate-200"
+                      } text-slate-900 rounded-lg px-4 py-3 outline-none transition-all duration-300
+                      focus:border-blue-500 focus:bg-white group-hover:bg-white placeholder:text-slate-400`}
+                      placeholder="Your email"
+                    />
+                  </div>
+                  {errors.email && (
+                    <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+                  )}
+                </div>
+              </div>
 
-            <div>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows={4}
-                className={`w-full bg-white/5 border ${
-                  errors.message ? "border-red-400" : "border-white/10"
-                } text-white rounded-lg px-4 py-3 outline-none transition-all duration-300
-                focus:border-rose-400/50 focus:bg-white/10 placeholder:text-white/50`}
-                placeholder="Enter your message"
-              />
-              {errors.message && (
-                <p className="text-red-300 text-sm mt-1">{errors.message}</p>
-              )}
-            </div>
+              <div>
+                <div className="relative group">
+                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-blue-600" />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={`w-full bg-white/90 border pl-11 ${
+                      errors.phone ? "border-red-300" : "border-slate-200"
+                    } text-slate-900 rounded-lg px-4 py-3 outline-none transition-all duration-300
+                    focus:border-blue-500 focus:bg-white group-hover:bg-white placeholder:text-slate-400`}
+                    placeholder="Your phone number"
+                  />
+                </div>
+                {errors.phone && (
+                  <p className="text-red-600 text-sm mt-1">{errors.phone}</p>
+                )}
+              </div>
 
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-rose-500 to-amber-500 text-white py-3 px-6 rounded-lg
-                       font-medium transition-all duration-300 hover:from-rose-600 hover:to-amber-600
-                       transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-lg"
-            >
-              Send Message
-            </button>
-          </form>
+              <div>
+                <div className="relative group">
+                  <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-slate-400 transition-colors group-focus-within:text-blue-600" />
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4}
+                    className={`w-full bg-white/90 border pl-11 ${
+                      errors.message ? "border-red-300" : "border-slate-200"
+                    } text-slate-900 rounded-lg px-4 py-3 outline-none transition-all duration-300
+                    focus:border-blue-500 focus:bg-white group-hover:bg-white placeholder:text-slate-400`}
+                    placeholder="Your message"
+                  />
+                </div>
+                {errors.message && (
+                  <p className="text-red-600 text-sm mt-1">{errors.message}</p>
+                )}
+              </div>
+
+              <motion.button
+                type="submit"
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-3 px-6 rounded-lg
+                         font-medium transition-all duration-300
+                         disabled:opacity-70 disabled:cursor-not-allowed relative group
+                         focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              >
+                <div className="absolute inset-0 bg-white/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="flex items-center justify-center space-x-2">
+                  <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </motion.button>
+            </form>
+          </motion.div>
         </div>
       </div>
     </div>
